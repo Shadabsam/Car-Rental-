@@ -29,3 +29,31 @@ try:
     
 except:
     print("some error")
+
+def init():
+    print("""
+
+          1.Dealer Registration
+          2.Dealer Login
+          3.User Registration
+          4.User Login
+          5.Admin Login
+          6.Exit
+        
+""")
+    userc=int(input("Enter Your Choice"))
+    if userc==1:
+        pass
+    elif userc==2:
+        pass
+    elif userc==3:
+        pass
+    elif userc==4:
+        pass
+    elif userc==5:
+        pass
+    else:
+        Exit()
+    
+init()
+

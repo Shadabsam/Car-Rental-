@@ -1,6 +1,6 @@
 import sqlite3 as sq
 conn=sq.connect("Carbookings.db")
-conn.cursor()
+c=conn.cursor()
 try:
     conn.execute("""create table if not exists admin 
                  (admin_id integer primary key,
@@ -30,6 +30,21 @@ try:
 except:
     print("some error")
 
+def dealerreg():
+    car_dealername=input("Enter The Name: ")
+    car_dealerpassword=input("Enter The Password: ")
+    car_dealermail=input("Enter The Mail: ")
+    car_dealerphone=input("Enter Phone Number: ")
+    ins="""insert into car_dealers (car_dealername,car_dealerpassword,car_dealermail,car_dealerphone) values
+    ('{}','{}','{}','{}')""".format(car_dealername,car_dealerpassword,car_dealermail,car_dealerphone)
+    c.execute(ins)
+    conn.commit()
+    init()
+
+
+
+
+
 def init():
     print("""
 
@@ -41,9 +56,9 @@ def init():
           6.Exit
         
 """)
-    userc=int(input("Enter Your Choice"))
+    userc=int(input("Enter Your Choice "))
     if userc==1:
-        pass
+        dealerreg()
     elif userc==2:
         pass
     elif userc==3:
@@ -54,6 +69,7 @@ def init():
         pass
     else:
         Exit()
-    
+
 init()
+    
 

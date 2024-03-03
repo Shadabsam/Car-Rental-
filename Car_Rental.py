@@ -1,3 +1,4 @@
+global dealerid
 import sqlite3 as sq
 conn=sq.connect("Carbookings.db")
 c=conn.cursor()
@@ -30,6 +31,26 @@ try:
 except:
     print("some error")
 
+def dealerlog():
+    car_dealername=input("Enter The Name: ")
+    car_dealerpassword=input("Enter The Password: ")
+    data=c.execute("select * from car_dealers where car_dealername='"+car_dealername+"' and car_dealerpassword='"+car_dealerpassword+"'")
+    t=len(data.fetchall())
+    if (t==1):
+        print("Login Successfull")
+        print("""
+              1.Add Cars
+              2.View Cars
+              3.Delete Cars
+              4.Update Cars
+              5.exit
+
+""")
+    else:
+        print("Invalid Username and password")
+        dealerlog()
+        
+
 def userreg():
     user_name=input("Enter Your Name: ")
     user_password=input("Enter Your Password: ")
@@ -61,11 +82,6 @@ def dealerreg():
     init()
 
 
-
-
-
-
-
 def init():
     print("""
 
@@ -77,15 +93,17 @@ def init():
           6.Exit
         
 """)
-    userc=int(input("Enter Your Choice "))
+    
+    userc=int(input("Enter Your Choice: "))
     if userc==1:
         dealerreg()
     elif userc==2:
-        pass
+        dealerlog()
     elif userc==3:
         userreg()
     elif userc==4:
         pass
+    
     elif userc==5:
         pass
     elif userc==6:

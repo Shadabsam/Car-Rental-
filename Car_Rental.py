@@ -30,6 +30,25 @@ try:
 except:
     print("some error")
 
+def userreg():
+    user_name=input("Enter Your Name: ")
+    user_password=input("Enter Your Password: ")
+    user_email=input("Emter Your Email: ")
+    user_phone=input("Enter Your Phone Number: ")
+    data=c.execute("select * from users where user_email='"+user_email+"'")
+    t=len(data.fetchall())
+    if (t==0):
+        ins="""insert into users(
+        user_name,user_password,user_email,user_phone) values
+        ('{}','{}','{}','{}')""".format(user_name,user_password,user_email,user_phone)
+        c.execute(ins)
+        conn.commit()
+        print("User Created....")
+        init()
+    else:
+        print("User email Already Exits.... ")
+        dealerreg()
+
 def dealerreg():
     car_dealername=input("Enter The Name: ")
     car_dealerpassword=input("Enter The Password: ")
@@ -40,6 +59,8 @@ def dealerreg():
     c.execute(ins)
     conn.commit()
     init()
+
+
 
 
 
@@ -62,13 +83,13 @@ def init():
     elif userc==2:
         pass
     elif userc==3:
-        pass
+        userreg()
     elif userc==4:
         pass
     elif userc==5:
         pass
-    else:
-        Exit()
+    elif userc==6:
+        exit()
 
 init()
     

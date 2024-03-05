@@ -18,7 +18,7 @@ try:
                  car_name varchar(20) not null,
                  car_type varchar(20) not null,
                  car_model varchar(20) not null,
-                 car_dealer int(11) not null,
+                 car_dealerid int(11) not null,
                  car_from varchar(20) not null,
                  car_to varchar(20) not null),
                  car_number varchar(20) not null''')
@@ -64,7 +64,7 @@ def initdealer():
     elif dlrc==2:
         view_cars()
     elif dlrc==3:
-        pass
+        del_car()
     elif dlrc==4:
         pass
     elif dlrc==5:
@@ -80,7 +80,7 @@ def addcars():
     car_from=input("Enter The Car To: ")
     car_to=input("Enter The Car To: ")
     car_number=input("Enter The Car Number: ")
-    ins="""insert into cars(car_name,car_type,car_model,car_dealer,car_from,car_to,car_number) values
+    ins="""insert into cars(car_name,car_type,car_model,car_dealerid,car_from,car_to,car_number) values
     ('{}','{}','{}','{}','{}','{}','{}')""".format(car_name,car_type,car_model,str(car_dealer),car_from,car_to,car_number)
     c.execute(ins)
     conn.commit()
@@ -89,13 +89,22 @@ def addcars():
 
 def view_cars():
     global dealerid
-    data=("select * from cars where car_dealer='"+str(dealerid)+"'")
+    data=("select * from cars where car_dealerid='"+str(dealerid)+"'")
     cabdata=c.execute(data)
     fn=cabdata.fetchall()
     #print("{0:15}{1:15}{2:15}{3:15}{4:15}{5:15}{6:15}".format("car name,car type,car model,car dealer id,car from,car to,car number"))
     for i in fn:
         print("{0:<15}{1:<15}{2:<15}{3:<15}{4:<15}{5:<15}{6:<15}".format(i[0],i[1],i[2],i[3],i[4],i[5],i[6]))
         initdealer()
+
+def del_car():
+    global dealerid
+    carid=input("Enter Car ID: ")
+    dlt="delete from cars where car_id='"+carid+"' and car_dealerid='"+str(dealerid)+"'"
+    c.execute(dlt)
+    conn.commit()
+    print("Car details deleted....")
+    initdealer()
 
 
 

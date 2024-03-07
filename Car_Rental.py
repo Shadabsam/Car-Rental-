@@ -1,4 +1,7 @@
-global dealerid
+global did
+global userid
+
+
 import sqlite3 as sq
 conn=sq.connect("Carbookings.db")
 c=conn.cursor()
@@ -33,13 +36,13 @@ except:
     print("some error")
 
 def dealerlog():
-    global dealerid
+    global did
     car_dealername=input("Enter The Name: ")
     car_dealerpassword=input("Enter The Password: ")
     data=c.execute("select * from car_dealers where car_dealername='"+car_dealername+"' and car_dealerpassword='"+car_dealerpassword+"'")
     d=data.fetchall()
     for i in d:
-        dealerid=i[0]
+        did=i[0]
     t=len(d)
     if (t==1):
         print("Login Successfull")
@@ -49,7 +52,7 @@ def dealerlog():
         dealerlog()
 
 def initdealer():
-    global dealerid
+    global did
     print("""
               1.Add Cars
               2.View Cars
@@ -68,28 +71,28 @@ def initdealer():
     elif dlrc==4:
         pass
     elif dlrc==5:
-        del dealerid
+        del did
         init()
 
 def addcars():
-    global dealerid
+    global did
     car_name=input("Enter The Car Name: ")
     car_type=input("Enter The Car Type: ")
     car_model=input("Enter The Car Model: ")
-    car_dealer=dealerid
+    car_dealerid=did
     car_from=input("Enter The Car To: ")
     car_to=input("Enter The Car To: ")
     car_number=input("Enter The Car Number: ")
     ins="""insert into cars(car_name,car_type,car_model,car_dealerid,car_from,car_to,car_number) values
-    ('{}','{}','{}','{}','{}','{}','{}')""".format(car_name,car_type,car_model,str(car_dealer),car_from,car_to,car_number)
+    ('{}','{}','{}','{}','{}','{}','{}')""".format(car_name,car_type,car_model,str(car_dealerid),car_from,car_to,car_number)
     c.execute(ins)
     conn.commit()
     print("Car details added")
     initdealer()
 
 def view_cars():
-    global dealerid
-    data=("select * from cars where car_dealerid='"+str(dealerid)+"'")
+    global did
+    data=("select * from cars where car_dealerid='"+str(did)+"'")
     cabdata=c.execute(data)
     fn=cabdata.fetchall()
     #print("{0:15}{1:15}{2:15}{3:15}{4:15}{5:15}{6:15}".format("car name,car type,car model,car dealer id,car from,car to,car number"))
@@ -98,13 +101,22 @@ def view_cars():
         initdealer()
 
 def del_car():
-    global dealerid
+    global did
     carid=input("Enter Car ID: ")
-    dlt="delete from cars where car_id='"+carid+"' and car_dealerid='"+str(dealerid)+"'"
+    dlt="delete from cars where car_id='"+carid+"' and car_dealerid='"+str(did)+"'"
     c.execute(dlt)
     conn.commit()
     print("Car details deleted....")
     initdealer()
+
+# def Update_car():
+#     global dealerid
+#     carid=input("Enter Car ID: ")
+#     dlt="update on cars where car_id='"+carid+"' and car_dealerid='"+str(dealerid)+"'"
+#     c.execute(dlt)
+#     conn.commit()
+#     print("Car details deleted....")
+#     initdealer()
 
 
 
@@ -131,6 +143,64 @@ def userreg():
     else:
         print("User email Already Exits.... ")
         dealerreg()
+
+def userlog():
+    global userid
+    username=input("Enter The Name: ")
+    userpassword=input("Enter The Password: ")
+    data=c.execute("select * from users where user_name='"+username+"' and user_password='"+userpassword+"'")
+    d=data.fetchall()
+    for i in d:
+        userid=i[0]
+    t=len(d)
+    if (t==1):
+        print("Login Successfull")
+        inituser()
+    else:
+        print("Invalid Username and password")
+        userlog()
+
+def userview(car_from="",car_to=""):
+    if car_from !="" and car_to !="":
+        data=("select * from cars where car_from='"+car_from+"' and car_to='"+car_to+"' ")
+        cabdata=c.execute(data)
+        fn=cabdata.fetchall()
+        for i in fn:
+            print(i)
+            inituser()
+    else:
+        data=("select * from cars ")
+        cabdata=c.execute(data)
+        fn=cabdata.fetchall()
+        #print("{0:15}{1:15}{2:15}{3:15}{4:15}{5:15}{6:15}".format("car name,car type,car model,car dealer id,car from,car to,car number"))
+        for i in fn:
+            print("{0:<15}{1:<15}{2:<15}{3:<15}{4:<15}{5:<15}{6:<15}".format(i[0],i[1],i[2],i[3],i[4],i[5],i[6]))
+            inituser()
+
+
+def inituser():
+    global userid
+    print("""
+            1.View All Cars
+            2.search Cars
+            3.Update Profile
+            4.Logout
+
+""")
+    userc1=int(input("Enter The User Choice "))
+    if userc1==1:
+        userview()
+    elif userc1==2:
+        car_from=input("Enter Car From: ")
+        car_to=input("Enter Car To: ")
+        userview(car_from,car_to)
+    elif userc1==3:
+        pass
+    elif userc1==4:
+        del userid
+        init()
+
+
 
 def dealerreg():
     car_dealername=input("Enter The Name: ")
@@ -164,13 +234,13 @@ def init():
     elif userc==3:
         userreg()
     elif userc==4:
-        pass
+        userlog()
     
     elif userc==5:
         pass
     elif userc==6:
         exit()
-
+    
 init()
     
 

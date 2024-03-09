@@ -177,6 +177,40 @@ def userview(car_from="",car_to=""):
             print("{0:<15}{1:<15}{2:<15}{3:<15}{4:<15}{5:<15}{6:<15}".format(i[0],i[1],i[2],i[3],i[4],i[5],i[6]))
             inituser()
 
+def user_update():
+    global userid
+    user_email=input("Enter the Email: ")
+    user_Phone=input("Enter the Phone Number: ")
+    updt="update users set user_email='"+user_email+"',user_phone='"+user_Phone+"' where user_id='"+str(userid)+"'"
+    c.execute(updt)
+    conn.commit()
+    print("User Profile Updated....")
+    inituser()
+
+def changePass():
+    global userid
+    oldPass=input("Enter The Old Password: ")
+    data=c.execute("select * from users where user_password='"+oldPass+"' and user_id='"+str(userid)+"' ")
+    d=data.fetchall()
+    t=len(d)
+    if t==1:
+        newPass=input("Enter The New Password: ")
+        conPass=input("Enter Confirm Password: ")
+        if (newPass==conPass):
+            updt="update users set user_password='"+newPass+"' where user_id='"+str(userid)+"'"
+            c.execute(updt)
+            conn.commit()
+            print("New Password Added.....")
+            inituser()
+        else:
+            print("New Password and Confirm Password Not Matched!...")
+            inituser()
+
+    else:
+        print("Invalid Old Password!..")
+        inituser()
+
+
 
 def inituser():
     global userid
@@ -184,7 +218,8 @@ def inituser():
             1.View All Cars
             2.search Cars
             3.Update Profile
-            4.Logout
+            4.Change Password
+            5.Logout
 
 """)
     userc1=int(input("Enter The User Choice "))
@@ -195,8 +230,10 @@ def inituser():
         car_to=input("Enter Car To: ")
         userview(car_from,car_to)
     elif userc1==3:
-        pass
+        user_update()
     elif userc1==4:
+        changePass()
+    elif userc1==5:
         del userid
         init()
 

@@ -1,5 +1,6 @@
 global did
 global userid
+global adminid
 
 
 import sqlite3 as sq
@@ -34,6 +35,70 @@ try:
     
 except:
     print("some error")
+
+# def add_admin():
+#     global adminid
+#     adminname=input("Enter The ADmin Name: ")
+#     adminpass=input("Enter The Admin Password: ")
+#     ins="""insert into admin(admin_username,admin_password) values
+#     ('{}','{}')""".format(adminname,adminpass)
+#     c.execute(ins)
+#     conn.commit()
+#     print("Admin Added....")
+#     adminLogin()
+
+def adminLogin():
+    global adminid
+    admin_username=input("Enter The Name: ")
+    admin_password=input("Enter The Password: ")
+    data=c.execute("select * from admin where admin_username='"+admin_username+"' and admin_password='"+admin_password+"'")
+    d=data.fetchall()
+    for i in d:
+        adminid=i[0]
+    t=len(d)
+    if t==1:
+        print("Login Successfull...")
+        initadmin()
+    else:
+        print("Invalid Username and Password!...")
+        adminLogin()
+
+def veiwallusers():
+    print("{0:10}{1:15}{2:18}{3:15}".format("user id","user name","user email","user phone"))
+    data="select * from users"
+    adata=c.execute(data)
+    fchall=adata.fetchall()
+    for i in fchall:
+        print("{0:^5}{1:^15}{2:^18}{3:^15}".format(i[0],i[1],i[3],i[4]))
+
+
+
+def initadmin():
+    global adminid
+
+    print("""
+          1.View All Users
+          2.View All Dealers
+          3.View Cars
+          4.Change Password
+          5.Logout
+
+""")
+    uc=int(input("Enter Your Choice "))
+    if uc==1:
+        veiwallusers()
+    elif uc==2:
+        pass
+    elif uc==3:
+        pass
+    elif uc==4:
+        pass
+    elif uc==5:
+        del adminid
+        init()
+
+
+
 
 def dealerlog():
     global did
@@ -274,7 +339,7 @@ def init():
         userlog()
     
     elif userc==5:
-        pass
+        adminLogin()
     elif userc==6:
         exit()
     

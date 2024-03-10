@@ -70,6 +70,80 @@ def veiwallusers():
     fchall=adata.fetchall()
     for i in fchall:
         print("{0:^5}{1:^15}{2:^18}{3:^15}".format(i[0],i[1],i[3],i[4]))
+    adminc=int(input("Ener 1 to Delete : "))
+    if adminc==1:
+        userID=input("Enter The User Id: ")
+        deldata="delete from users where user_id='"+str(userID)+"'"
+        c.execute(deldata)
+        conn.commit()
+        print("User Deleted.....")
+        initadmin()
+    else:
+        initadmin()
+
+def viewall_dealers():
+    print("{0:10}{1:15}{2:18}{3:15}".format("car_dealerid","car_dealername","car_dealeremail","car_dealerphone"))
+    data="select * from car_dealers"
+    adata=c.execute(data)
+    fchall=adata.fetchall()
+    for i in fchall:
+        print("{0:^5}{1:^15}{2:^18}{3:^15}".format(i[0],i[1],i[3],i[4]))
+    adminc=int(input("Ener 1 to Delete : "))
+    if adminc==1:
+        userID=input("Enter The User Id: ")
+        deldata="delete from car_dealers where car_dealarid='"+str(userID)+"'"
+        c.execute(deldata)
+        conn.commit()
+        print("Car Dealer Deleted.....")
+        initadmin()
+    else:
+        initadmin()
+
+def view_allcars():
+    data=("select * from cars ")
+    cabdata=c.execute(data)
+    fn=cabdata.fetchall()
+    #print("{0:15}{1:15}{2:15}{3:15}{4:15}{5:15}{6:15}".format("car name,car type,car model,car dealer id,car from,car to,car number"))
+    for i in fn:
+        print("{0:<15}{1:<15}{2:<15}{3:<15}{4:<15}{5:<15}{6:<15}".format(i[0],i[1],i[2],i[3],i[4],i[5],i[6]))
+    adminc=int(input("Ener 1 to Delete : "))
+    if adminc==1:
+        userID=input("Enter The User Id: ")
+        deldata="delete from cars where car_id='"+str(userID)+"'"
+        c.execute(deldata)
+        conn.commit()
+        print("Car Deleted.....")
+        initadmin()
+    else:
+        initadmin()
+
+def admin_pwd_nm():
+    global adminid
+    oldPass=input("Enter The Old Password: ")
+    data=c.execute("select * from admin where admin_password='"+oldPass+"' and admin_id='"+str(adminid)+"' ")
+    d=data.fetchall()
+    t=len(d)
+    if t==1:
+        newPass=input("Enter The New Password: ")
+        conPass=input("Enter Confirm Password: ")
+        if (newPass==conPass):
+            updt="update admin set admin_password='"+newPass+"' where admin_id='"+str(adminid)+"'"
+            c.execute(updt)
+            conn.commit()
+            print("New Password Added.....")
+            initadmin()
+        else:
+            print("New Password and Confirm Password Not Matched!...")
+            initadmin()
+
+    else:
+        print("Invalid Old Password!..")
+        initadmin()
+
+            
+
+ 
+
 
 
 
@@ -88,11 +162,11 @@ def initadmin():
     if uc==1:
         veiwallusers()
     elif uc==2:
-        pass
+        viewall_dealers()
     elif uc==3:
-        pass
+        view_allcars()
     elif uc==4:
-        pass
+        admin_pwd_nm()
     elif uc==5:
         del adminid
         init()
@@ -134,7 +208,7 @@ def initdealer():
     elif dlrc==3:
         del_car()
     elif dlrc==4:
-        pass
+        Update_car()
     elif dlrc==5:
         del did
         init()
@@ -174,22 +248,21 @@ def del_car():
     print("Car details deleted....")
     initdealer()
 
-# def Update_car():
-#     global dealerid
-#     carid=input("Enter Car ID: ")
-#     dlt="update on cars where car_id='"+carid+"' and car_dealerid='"+str(dealerid)+"'"
-#     c.execute(dlt)
-#     conn.commit()
-#     print("Car details deleted....")
-#     initdealer()
-
-
-
+def Update_car():
+    global did
+    car_name=input("Enter Car Name: ")
+    car_type=input("Enter Car Tpye: ")
+    car_model=input("Enter Car Model: ")
+    car_from=input("Enter Car From: ")
+    car_to=input("Enter Car To: ")
+    car_number=input("Enter Car Number: ")
+    dlt="update cars set car_name='"+car_name+"',car_type='"+car_type+"',car_model='"+car_model+"',car_from='"+car_from+"',car_to='"+car_to+"',car_number='"+car_number+"' where car_dealerid='"+str(did)+"'"
+    c.execute(dlt)
+    conn.commit()
+    print("Car details Updated....")
+    initdealer()
     
-
-
-        
-
+    
 def userreg():
     user_name=input("Enter Your Name: ")
     user_password=input("Enter Your Password: ")
